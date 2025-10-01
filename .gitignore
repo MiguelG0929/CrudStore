@@ -1,33 +1,46 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# ===============================
+# Ignorar archivos generados por Maven/Gradle
+# ===============================
+/target/
+/build/
+*.log
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Wrapper de Maven (sí necesario para compilar)
+!.mvn/wrapper/maven-wrapper.jar
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# Ignorar propiedades sensibles
+/src/main/resources/application.properties
+
+# ===============================
+# IDEs y editores
+# ===============================
+# IntelliJ IDEA
+/.idea
 *.iml
+*.iws
 *.ipr
 
-### NetBeans ###
+# Eclipse / STS
+.classpath
+.project
+.settings/
+.springBeans/
+.apt_generated/
+.factorypath
+.sts4-cache/
+
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# VS Code
 .vscode/
+
+# ===============================
+# Otros
+# ===============================
+*.class
+.DS_Store
