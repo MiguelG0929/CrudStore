@@ -57,6 +57,25 @@ public class DetallePedido {
         this.subtotal = subtotal;
     }
 
+    //Getters and Setters de Relaciones
+
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
     //Muchos detalles (Productos) del Pedido, pertenecen a un solo Pedido
     @ManyToOne
     @JoinColumn(name = "pedido_id")

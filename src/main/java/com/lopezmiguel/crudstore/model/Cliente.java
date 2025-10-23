@@ -1,5 +1,6 @@
 package com.lopezmiguel.crudstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -14,9 +15,14 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)  //no puede existir cliente sin nombre
     private String nombre;
+
     private String apellido;
+
+    @Column(unique = true, nullable = false)  //no pueden haber dos client con el mismo email NO vacio/nulo
     private String email;
+
     private String telefono;
     private String direccion;
     private LocalDate fechaNacimiento;
@@ -102,14 +108,40 @@ public class Cliente {
 
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+
+    }
+
+    //Getters and Setters de Relaciones
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
+    public Carrito getCarrito() {
+        return carrito;
+    }
+
+    public void setCarrito(Carrito carrito) {
+        this.carrito = carrito;
     }
 
     //Un Cliente puede hacer muchos pedidos, pero cada pedido es de un solo cliente
     @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
     private List<Pedido> pedidos = new ArrayList<>(); //Evitar NullPointerException por ello se inicializa
+    /*Se usa @JsonIgnore para evitar bucles infinitos al convertir las relaciones en JSON.
+    Sin esta anotación, al enviar datos al frontend, Spring intentaría convertir ambas partes
+    de la relación (por ejemplo Cliente → Pedido → Cliente → Pedido...), causando un error o recursión.
+    Además, evita enviar datos innecesarios al frontend si no son requeridos.
+    En caso de necesitar estos datos más adelante, se puede usar DTOs o @JsonManagedReference/@JsonBackReference.
+    @JsonIgnore */
 
     //Un cliente tiene un Carrito y un Carrito tiene un cliente
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Carrito carrito;
 
 }

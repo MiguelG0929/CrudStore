@@ -1,5 +1,6 @@
 package com.lopezmiguel.crudstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -51,6 +52,22 @@ public class Carrito {
         this.total = total;
     }
 
+    //Getters and Setters de relaciones
+    public List<ItemCarrito> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemCarrito> items) {
+        this.items = items;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     //Un Cliente tiene un solo carrito y un carrito pertenece a un solo cliente
     @OneToOne
@@ -59,6 +76,7 @@ public class Carrito {
 
     //Un carrito puede tener muchos items, pero cada item esta en solo un carrito
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ItemCarrito> items = new ArrayList<>();
 
 

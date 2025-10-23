@@ -1,5 +1,6 @@
 package com.lopezmiguel.crudstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,9 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)    //Asegura que cada pedido tenga un numero unico
     private String numPedido;  //numero unico
+
     private LocalDateTime fechaPedido;
     private LocalDateTime fechaEnvio;
     private LocalDateTime fechaEntrega;
@@ -115,6 +118,33 @@ public class Pedido {
         this.total = total;
     }
 
+    //Getters and Setters de Relaciones
+
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public List<DetallePedido> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetallePedido> detalles) {
+        this.detalles = detalles;
+    }
+
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
+    }
+
     //Muchos pedidos pertenecen a solo un Cliente
     @ManyToOne
     @JoinColumn(name = "cliente_id")
@@ -122,10 +152,12 @@ public class Pedido {
 
     //Un Pedido contiene muchos prodcutos(detalles), pere cada detalle pertenece a solo un Pedido
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<DetallePedido> detalles = new ArrayList<>();
 
     //Un Pedido tiene una sola Factura y una Factura corresponde a un solo Pedido
     @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Factura factura;
 
 

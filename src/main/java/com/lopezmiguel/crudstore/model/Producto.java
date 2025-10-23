@@ -1,6 +1,7 @@
 package com.lopezmiguel.crudstore.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -14,13 +15,22 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //le dice a JPA que este id se genera automaticamente en la BD
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
+
     private String descripcion;
+
+    @Column(nullable = false) //Todo producto deber tener un precio asignado
     private Double precio;
+
     private Integer stock;
     private String color;
     private String categoria;
+
+    @Column(unique = true, nullable = false) //cada producto tiene un código SKU único (como un código de inventario) es obligatorio
     private String sku; //Código unico que identifica dicho producto
+
+
     private Boolean activo;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
@@ -132,13 +142,33 @@ public class Producto {
         this.fechaActualizacion = fechaActualizacion;
     }
 
+    //Getters and Setters de Relaciones
+
+
+    public List<DetallePedido> getDetallePedidos() {
+        return detallePedidos;
+    }
+
+    public void setDetallePedidos(List<DetallePedido> detallePedidos) {
+        this.detallePedidos = detallePedidos;
+    }
+
+    public List<ItemCarrito> getItemsCarrito() {
+        return itemsCarrito;
+    }
+
+    public void setItemsCarrito(List<ItemCarrito> itemsCarrito) {
+        this.itemsCarrito = itemsCarrito;
+    }
 
     //Un Productos puede aparecer en muchos detalles pedidos
     @OneToMany(mappedBy = "producto")
+    @JsonIgnore
     private List<DetallePedido> detallePedidos = new ArrayList<>();
 
     //Un producto puede estar en muchos carritos, pero cada item del carrito referencia a solo un Producto
     @OneToMany(mappedBy = "producto")
+    @JsonIgnore
     private List<ItemCarrito> itemsCarrito = new ArrayList<>();
 
 
